@@ -1,0 +1,8 @@
+{"level":"info","message":"Parameters '+n1+' and '+n2+' received for addition","service":"user-service"}
+{"level":"info","message":"Parameters '+n1+' and '+n2+' received for addition","service":"user-service","timestamp":"2023-04-02T10:19:00.631Z"}
+{"level":"info","message":"Parameters '+n1+' and '+n2+' received for subtraction","service":"user-service","timestamp":"2023-04-02T10:38:42.682Z"}
+{"level":"info","message":"Parameters '+n1+' and '+n2+' received for division","service":"user-service","timestamp":"2023-04-02T10:38:59.179Z"}
+{"level":"error","message":"n2 cannot be 0","service":"user-service","timestamp":"2023-04-02T10:40:25.594Z"}
+{"level":"error","message":"n2 cannot be 0","service":"user-service","timestamp":"2023-04-02T10:41:05.646Z"}
+{"level":"info","message":"Parameters '+n1+' and '+n2+' received for division","service":"user-service","timestamp":"2023-04-02T10:41:20.878Z"}
+{"level":"error","message":"n2 cannot be 0","service":"user-service","timestamp":"2023-04-02T10:41:36.876Z"}
