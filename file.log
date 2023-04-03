@@ -6,3 +6,4 @@
 {"level":"error","message":"n2 cannot be 0","service":"user-service","timestamp":"2023-04-02T10:41:05.646Z"}
 {"level":"info","message":"Parameters '+n1+' and '+n2+' received for division","service":"user-service","timestamp":"2023-04-02T10:41:20.878Z"}
 {"level":"error","message":"n2 cannot be 0","service":"user-service","timestamp":"2023-04-02T10:41:36.876Z"}
+{"level":"info","message":"Parameters '+n1+' and '+n2+' received for subtraction","service":"user-service","timestamp":"2023-04-03T13:29:05.670Z"}

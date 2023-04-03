@@ -3,6 +3,25 @@ const res = require("express/lib/response");
 const winston = require('winston');
 const {format} = require('winston');
 const app = express();
+const jwt = require("jsonwebtoken");
+const fs = require("fs");
+const passport = require("passport");
+var JwtStrategy = require('passport-jwt').Strategy,
+    ExtractJwt = require('passport-jwt').ExtractJwt;
+
+
+var opts = {}
+opts.jwtFromRequest = ExtractJwt.fromAuthHeaderAsBearerToken();
+opts.secretOrKey = 'secret';
+passport.use(
+    new JwtStrategy(opts, function(jwt_payload, done) {
+    
+    return done(null, user);
+            
+        }
+    )
+);
+
 
 const logger = winston.createLogger({
     level: 'info',
@@ -23,7 +42,27 @@ if (process.env.NODE_ENV !== 'production') {
     }));
 }
 
-const add = (n1, n2) => {
+
+
+
+app.get("/createtoken", async (req, res) => {
+    let user = {name: "Lakshya", rollNumber: "222521408"};
+    const token = jwt.sign({user: user}, "SECTRET_KEY");
+    console.log("token:", token);
+    await fs.writeFile(
+    "fakelocal.json",
+    JSON.stringify({Authorization: `Bearer ${token}`}),
+    (err) => {
+        if (err) throw err;
+        console.log("Token added to local storage");
+    }
+    );
+
+    res.send("You just made a new token");
+});
+
+
+function add (n1, n2) {
     return n1 + n2;
 }
 
@@ -38,7 +77,7 @@ function multiply (n1, n2) {
 function divide (n1, n2) {
     return n1/n2;
 }
-app.get("/add", (req, res) => {
+app.get("/add", passport.authenticate("jwt", {session: false}), (req, res) => {
     try{
         const n1 = parseFloat(req.query.n1);
         const n2 = parseFloat(req.query.n2);
