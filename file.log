@@ -7,3 +7,7 @@
 {"level":"info","message":"Parameters '+n1+' and '+n2+' received for division","service":"user-service","timestamp":"2023-04-02T10:41:20.878Z"}
 {"level":"error","message":"n2 cannot be 0","service":"user-service","timestamp":"2023-04-02T10:41:36.876Z"}
 {"level":"info","message":"Parameters '+n1+' and '+n2+' received for subtraction","service":"user-service","timestamp":"2023-04-03T13:29:05.670Z"}
+{"level":"error","message":"n1 is incorrectly defined","service":"user-service","timestamp":"2023-05-14T05:27:15.249Z"}
+{"level":"info","message":"Parameters '+n1+' and '+n2+' received for addition","service":"user-service","timestamp":"2023-05-14T05:27:33.586Z"}
+{"level":"info","message":"Parameters '+n1+' and '+n2+' received for addition","service":"user-service","timestamp":"2023-05-14T05:28:01.600Z"}
+{"level":"info","message":"Parameters '+n1+' and '+n2+' received for addition","service":"user-service","timestamp":"2023-06-08T04:26:42.667Z"}

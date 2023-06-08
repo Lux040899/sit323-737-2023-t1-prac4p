@@ -1,26 +1,51 @@
 const express =  require("express");
+const bodyParser = require('body-parser');
 const res = require("express/lib/response");
 const winston = require('winston');
 const {format} = require('winston');
 const app = express();
 const jwt = require("jsonwebtoken");
-const fs = require("fs");
-const passport = require("passport");
-var JwtStrategy = require('passport-jwt').Strategy,
-    ExtractJwt = require('passport-jwt').ExtractJwt;
+const passport = require('passport');
+const passportJWT = require('passport-jwt');
+const JwtStrategy = passportJWT.Strategy;
+const ExtractJwt = passportJWT.ExtractJwt;
+
+// Define the secret for the JWT
+const jwtSecret = 'my_secret_key';
+
+// Define the users that are allowed to access the calculator
+const users = [
+  {
+    id: 1,
+    username: 'user1',
+    password: 'password1'
+  },
+  {
+    id: 2,
+    username: 'user2',
+    password: 'password2'
+  }
+];
 
 
-var opts = {}
-opts.jwtFromRequest = ExtractJwt.fromAuthHeaderAsBearerToken();
-opts.secretOrKey = 'secret';
-passport.use(
-    new JwtStrategy(opts, function(jwt_payload, done) {
-    
+
+// Configure passport to use JWT authentication
+const jwtOptions = {
+  jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
+  secretOrKey: jwtSecret
+};
+
+const jwtStrategy = new JwtStrategy(jwtOptions, (payload, done) => {
+  const user = users.find(user => user.id === payload.sub);
+  if (user) {
     return done(null, user);
-            
-        }
-    )
-);
+  } else {
+    return done(null, false);
+  }
+});
+
+passport.use('jwt', jwtStrategy);
+
 
 
 const logger = winston.createLogger({
@@ -45,21 +70,7 @@ if (process.env.NODE_ENV !== 'production') {
 
 
 
-app.get("/createtoken", async (req, res) => {
-    let user = {name: "Lakshya", rollNumber: "222521408"};
-    const token = jwt.sign({user: user}, "SECTRET_KEY");
-    console.log("token:", token);
-    await fs.writeFile(
-    "fakelocal.json",
-    JSON.stringify({Authorization: `Bearer ${token}`}),
-    (err) => {
-        if (err) throw err;
-        console.log("Token added to local storage");
-    }
-    );
 
-    res.send("You just made a new token");
-});
 
 
 function add (n1, n2) {
@@ -77,7 +88,10 @@ function multiply (n1, n2) {
 function divide (n1, n2) {
     return n1/n2;
 }
-app.get("/add", passport.authenticate("jwt", {session: false}), (req, res) => {
+
+app.use(bodyParser.json());
+
+app.get("/add", passport.authenticate('jwt', { session: false }), (req, res) => {
     try{
         const n1 = parseFloat(req.query.n1);
         const n2 = parseFloat(req.query.n2);
@@ -208,6 +222,17 @@ app.get("/divide", (req, res) => {
       }
 })
 
+app.post('/login', (req, res) => {
+    const { username, password } = req.body;
+    const user = users.find(user => user.username === username && user.password === password);
+    if (user) {
+      const payload = { sub: user.id };
+      const token = jwt.sign(payload, jwtSecret);
+      res.send({ token: token });
+    } else {
+      res.status(401).send('Unauthorized');
+    }
+});
 
 const port=3040;
 app.listen(port,()=> {
